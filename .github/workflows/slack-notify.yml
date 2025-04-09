@@ -1,0 +1,15 @@
+name: Send Slack Notification
+on:
+  push:
+    branches:
+      - main   # Trigger on push to the main branch
+jobs:
+  slack_notification:
+    runs-on: ubuntu-latest  # Use the latest Ubuntu environment
+    steps:
+      - name: Send message to Slack
+        run: |
+          curl -X POST -H ‘Content-type: application/json’ \
+          --data ‘{
+            “text”: “:rocket: New push to the *main* branch in the `${{ github.repository }}` repository.\nCommit message: ${{ github.event.head_commit.message }}\nAuthor: ${{ github.actor }}\nCommit URL: ${{ github.event.head_commit.url }}”
+          }’ ${{ secrets.SLACK_WEBHOOK_URL }}
